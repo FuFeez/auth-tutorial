@@ -1,6 +1,6 @@
 // main.js
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
@@ -13,13 +13,5 @@ if (ReactDOM.createRoot) {
     <React.StrictMode>
       <App />
     </React.StrictMode>
-  );
-} else {
-  // Fallback for older React versions
-  ReactDOM.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>,
-    root
   );
 }

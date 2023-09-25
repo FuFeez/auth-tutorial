@@ -9,6 +9,8 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import update_last_login
+# from rest_framework.permissions import IsAuthenticated
+
 
 User = get_user_model()
 
@@ -20,8 +22,19 @@ class LoginAPIView(APIView):
         user = serializer.validated_data['user']
         update_last_login(None, user)
         token, created = Token.objects.get_or_create(user=user)
-        return Response({"status": status.HTTP_200_OK, "Token": token.key})
+        user = User.objects.get(username=user.username)
+        return Response({"status": status.HTTP_200_OK, "Token": token.key, "role": user.is_superuser})
     
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
+
+class UserRoleView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.is_superuser:
+            role = 'admin'
+        else:
+            role = 'patient'
+        return Response({'role': role}, status=status.HTTP_200_OK)

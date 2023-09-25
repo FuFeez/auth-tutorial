@@ -1,6 +1,8 @@
 // src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,7 @@ const Login = () => {
   });
 
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +25,10 @@ const Login = () => {
       
       if (response.data && response.data.Token) {
         setMessage('Login successful.');
+        window.localStorage.setItem('Token', response.data.Token);
+        window.localStorage.setItem('role', response.data.role)
+        
+        navigate('/done');
         // You can also save the token in your state or local storage if needed
         // Example: setToken(response.data.Token);
       } else {
